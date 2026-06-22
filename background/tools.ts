@@ -599,7 +599,6 @@ void settings_.ready_.then((): void => {
     set_curIncognito_(a.incognito ? IncognitoType.true
       : !OnChrome || Build.MinCVer >= BrowserVer.MinNoAbnormalIncognito
       ? IncognitoType.ensuredFalse : IncognitoType.mayFalse)
-    if (!Build.MV3) { return }
     const sessionStorage = browser_.storage.session
     interface RecencyStorage { e: [ tabId: number, monoTime: number ][], b: number }
     const kRecencyField = "recency"
