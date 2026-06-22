@@ -25,7 +25,7 @@
   "content_scripts": [ {
     "all_frames": true,
     "js": [
-      "lib/env.ts",
+      "lib/env.js",
       "lib/utils.js",
       "lib/keyboard_utils.js",
       "lib/dom_utils.js",
@@ -59,7 +59,7 @@
   }, {
     "all_frames": true,
     "js": [
-      "content/extend_click_vc.ts"
+      "content/extend_click_vc.js"
     ],
     "match_about_blank": true,
     "match_origin_as_fallback": true,
