@@ -1716,25 +1716,7 @@ const doubleEval_mv2 = function (_functionBody: string | object): unknown {
   const info = typeof _functionBody === "object" && _functionBody ? _functionBody as ReturnType<typeof parseArgsAndEnv>
       : parseArgsAndEnv(arguments, null), hasEnv = !Build.MV3 && !!info.globals
   let func: (() => unknown) | null | undefined
-  if (!Build.MV3 && NativeFunctionCtor === null && !hasEnv) {
-    const ctor = baseFunctionCtor(parseArgsAndEnv(["Function"], DefaultIsolate))() as FunctionConstructor
-    NativeFunctionCtor = false
-    try { ctor("1"); NativeFunctionCtor = ctor } catch { /* empty */ }
-  }
-  if (!Build.MV3 && NativeFunctionCtor && !hasEnv) {
-    const arr2 = info.args.slice() as unknown[]
-    arr2.unshift(DefaultIsolate)
-    arr2.push('"use strict";\n' + info.body)
-    try {
-      if (!(Build.BTypes & BrowserType.Chrome) || Build.MinCVer >= BrowserVer.MinTestedES6Environment) {
-        func = new NativeFunctionCtor(... <string[]> arr2) as () => unknown
-      } else {
-        func = new (NativeFunctionCtor.bind.apply<new (...args: string[]) => Function
-            , string[], new () => () => unknown>(NativeFunctionCtor, arr2 as string[]))
-      }
-    } catch {}
-    if (func) { return func() }
-  }
+ 
   info.globals ??= DefaultIsolate
   func = baseFunctionCtor(info, null)
   return func()
@@ -1743,20 +1725,14 @@ const doubleEval_mv2 = function (_functionBody: string | object): unknown {
 const exposeStack = (stackArray: StackFrame[]): { bindings: VarBindings, vars: VarList, name: string }[] =>
     stackArray.slice().reverse().map(frame => ({ bindings: frame.o, vars: frame.x, name: frame.y ?? "" }))
 
-if (Build.MV3) {
-  const browser_ = Build.BTypes&BrowserType.Chrome && (DefaultIsolate as any).chrome || (DefaultIsolate as any).browser
-  if (browser_?.runtime?.connect && typeof VApi === "object" && VApi) {
-    VApi!.v = outerEval_
-  } else {
-    (DefaultIsolate as any)[GlobalConsts.kEvalNameInMV3] = outerEval_
-  }
+
+const browser_ = Build.BTypes&BrowserType.Chrome && (DefaultIsolate as any).chrome || (DefaultIsolate as any).browser
+if (browser_?.runtime?.connect && typeof VApi === "object" && VApi) {
+  VApi!.v = outerEval_
 } else {
-  typeof VApi === "object" && VApi ? VApi!.v = outerEval_
-      : (DefaultIsolate as Partial<VApiTy["v"]>).vimiumEval = outerEval_
-  outerEval_.vimiumEval = outerEval_
-  outerEval_.doubleEval = doubleEval_mv2
-  outerEval_["noNative"] = (): void => { NativeFunctionCtor = false }
+  (DefaultIsolate as any)[GlobalConsts.kEvalNameInMV3] = outerEval_
 }
+
 outerEval_["getStack"] = (exc?: boolean): unknown => (exc && !g_exc ? null : {
   stack: exposeStack(exc ? g_exc!.l : locals_),
   depth: exc ? g_exc!.d : stackDepth_, globals: exc ? g_exc!.g : isolate_,
