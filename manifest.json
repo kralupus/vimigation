@@ -25,7 +25,7 @@
   "content_scripts": [ {
     "all_frames": true,
     "js": [
-      "lib/env.js",
+      "lib/env.ts",
       "lib/utils.js",
       "lib/keyboard_utils.js",
       "lib/dom_utils.js",
