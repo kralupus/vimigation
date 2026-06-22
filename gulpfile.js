@@ -710,7 +710,7 @@ const beforeTerser = exports.beforeTerser = (file) => {
     get();
     contents = contents.replaceAll("isSafeEl_()", "true");
   }
-  if (allPathStr.includes("/env.ts")) {
+  if (allPathStr.includes("/env.js")) {
     const result = skip_declaring_known_globals(btypes, minCVer, () => (get(), contents))
     if (result != null) {
       contents = result
