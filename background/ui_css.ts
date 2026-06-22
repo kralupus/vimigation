@@ -69,13 +69,7 @@ export const reloadCSS_ = (action: MergeAction, knownCssStr?: string): SettingsN
     }
     const cssFile = parseSections_(css)
     let isHighContrast_ff = false, hcChanged_ff = false
-    if (OnFirefox && !Build.MV3) {
-      if (!matchMedia("(forced-colors)").matches) {
-        isHighContrast_ff = storageCache_.get(GlobalConsts.kIsHighContrast) === "1"
-      }
-      hcChanged_ff = isHighContrast_ff_ !== isHighContrast_ff
-      set_isHighContrast_ff_(isHighContrast_ff)
-    }
+
     css = cssFile.ui!
     if (hasAll) {
       // Note: must not move "all:" into ":host" even when "s" and >= MinSelector$deep$InDynamicCssMeansNothing
@@ -261,10 +255,7 @@ export const MediaWatcher_ = {
     const doListen = listenType === 2
     let watchers = MediaWatcher_.watchers_, cur = watchers[key],
     name = !key ? "prefers-reduced-motion" as const : "prefers-color-scheme" as const;
-    if (!Build.MV3 && cur === MediaNS.Watcher.WaitToTest && doListen) {
-      watchers[key] = cur = matchMedia_(`(${name})`).matches ? MediaNS.Watcher.NotWatching
-          : MediaNS.Watcher.InvalidMedia;
-    }
+   
     if (doListen && cur === MediaNS.Watcher.NotWatching) {
       const query = matchMedia_(`(${name}: ${!key ? "reduce" : "dark"})`);
       Build.MV3 || (query.onchange = MediaWatcher_._onChange)
@@ -287,12 +278,7 @@ export const MediaWatcher_ = {
   },
   update_ (this: void, key: MediaNS.kName, embed?: 1 | 0, rawMatched?: boolean | null): void {
     let watcher = MediaWatcher_.watchers_[key]
-    if (!Build.MV3 && !hasReliableWatchers && OnFirefox && embed == null && typeof watcher === "object") {
-      watcher.onchange = null
-      watcher = matchMedia_(watcher.media)
-      watcher.onchange = MediaWatcher_._onChange
-      MediaWatcher_.watchers_[key] = watcher
-    }
+   
     const finalMatched: boolean = typeof watcher === "object" ? watcher.matches : rawMatched != null ? rawMatched
         : (key ? settingsCache_.autoDarkMode : settingsCache_.autoReduceMotion) === 1
     setMediaState_(key, finalMatched, embed ? 0 : 1)
@@ -426,8 +412,5 @@ void ready_.then((): void => {
     installation_ && installation_.then(details => details && reloadCSS_(MergeAction.rebuildWhenInit))
   }
   updateHooks_.userDefinedCss = mergeCSS
-  if (!Build.MV3 && OnFirefox && Build.MinFFVer < FirefoxBrowserVer.MinMediaQueryListenersWorkInBg) {
-    hasReliableWatchers = CurFFVer_ > FirefoxBrowserVer.MinMediaQueryListenersWorkInBg - 1
-    _mediaTimer = hasReliableWatchers ? -1 : 0
-  }
+ 
 })
