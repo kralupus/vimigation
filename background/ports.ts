@@ -694,7 +694,6 @@ const tryToKeepAlive = (rawNotFromInterval: BOOL): KKeep | void => {
     kAutoDisconnectPorts ? failed && /** never */ (stillAlive.forEach(_safeRefreshPort), refreshPorts_(frames, 1))
         : stillAlive.length && frames.ports_.push(...stillAlive)
   }
-  if (!Build.MV3) { return }
   if (!kAutoDisconnectPorts) { framesToKeep || saveRecency_ && saveRecency_(); return }
   const newAliveTabId = framesToKeep ? framesToKeep.cur_.s.tabId_ : -1
   if (lastKeptTabId_ !== newAliveTabId) {
