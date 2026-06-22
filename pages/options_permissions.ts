@@ -114,8 +114,7 @@ export class OptionalPermissionsOption_ extends Option_<"nextPatterns"> {
         }
       }
       if (i.type_ === 2) {
-        if (!Build.MV3) { /* empty */ }
-        else if (wanted === 2) {
+        if (wanted === 2) {
           new_nav_permissions.push(i.name_)
         } else {
           gotoCrContentSettings = true
