@@ -471,11 +471,6 @@ updateHooks_.vimSync = (value): void => {
 void settings_.ready_.then((): void => {
   const vimSync = settingsCache_.vimSync
   if (vimSync === false || !vimSync && !hasEmptyLocalStorage_) {
-    if (!Build.MV3) {
-      let doUpdate = updateToLocal_ === true
-      set_updateToLocal_(doUpdate ? null : updateLegacyToLocal!)
-      doUpdate && updateLegacyToLocal!(6000)
-    }
     Build.MV3 || "showActionIcon" in updateHooks_ ? set_installation_(null)
         : setTimeout((): void => { set_installation_(null) }, 1000)
   } else if (installation_) { // on startup
