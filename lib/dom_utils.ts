@@ -766,12 +766,7 @@ export const runJS_ = (code: string, returnEl?: HTMLScriptElement | null | 0
     const docEl = !OnFirefox ? docEl_unsafe_() : null
     const script = returnEl || createElement_("script"), kJS = "allow-scripts"
     const sandbox = !isTop && ((frameElement_() || {}) as Partial<AccessableIFrameElement>).sandbox
-    if (!Build.MV3) {
-      script.type = "text/javascript";
-      // keep it fast, rather than small
-      !OnChrome || Build.MinCVer >= BrowserVer.MinEnsured$ParentNode$$appendAndPrepend
-          ? script.append!(code) : textContent_s(script, code)
-    }
+
     if (sandbox && ! ((OnChrome && Build.MinCVer < BrowserVer.Min$HTMLIFrameElement$$sandbox$isTokenList || OnEdge)
         && isTY(sandbox) ? sandbox.includes(kJS) : (sandbox as DOMTokenList).contains(kJS))) {
       appendNode_s(createElement_("a"), script)
