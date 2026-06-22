@@ -668,8 +668,6 @@ DocCls.write = myDocWrite
       && tmpChromeVer && tmpChromeVer < BrowserVer.MinEventListenersFromExtensionOnSandboxedPage) {
     recordLog(kTip.logNotWorkOnSandboxed)()
     safeDestroy(1)
-  } else if (!Build.MV3) {
-    /*#__INLINE__*/ setupBackupTimer_cr()
   }
 })(grabBackFocus as boolean)
 } : 0 as never) as () => void
