@@ -500,9 +500,6 @@ importTypeSelect.onclick = null as never
 importTypeSelect.onchange = function (this: HTMLSelectElement): void {
   $("#importButton").focus();
   if (this.value === "exported") {
-    if (!(OnChrome && !Build.MV3 && noBlobSupport_cr_mv2_(1))) {
-      simulateClick_(fileInput)
-    }
     return;
   }
   const recommended = "../settings-template.json";
