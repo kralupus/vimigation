@@ -374,31 +374,9 @@ export const handleImageUrl = (url: `data:${string}` | "", buffer: Blob | null
       && curIncognito_ !== IncognitoType.true && (!cPort || !cPort.s.incognito_)
       && (!OnFirefox || actions === kTeeTask.DrawAndCopy && !inGroup)
   const needBlob_mv2 = !Build.MV3 && (actions & kTeeTask.Download || copyFromBlobUrl_mv2)
-  if (!Build.MV3 && needBlob_mv2 && !buffer) {
-    const p = BgUtils_.fetchFile_(url as "data:", "blob")
-    Build.NDEBUG || p.catch((err: any | Event): void => { console.log("handleImageUrl can't request `data:` :", err) })
-    void p.then((buffer2): void => {
-      handleImageUrl(url, buffer2, actions, resolve, title, text, doShow, inGroup)
-    })
-    return
-  }
-  if (!Build.MV3 && _tempBlob_mv2) {
-    clearTimeout(_tempBlob_mv2[0]), revokeBlobUrl_mv2(_tempBlob_mv2[1])
-    _tempBlob_mv2 = null
-  }
+ 
   const blobRef_mv2 = !Build.MV3 && needBlob_mv2 ? URL.createObjectURL(buffer) : ""
-  if (!Build.MV3 && blobRef_mv2) {
-    _tempBlob_mv2 = [setTimeout((): void => {
-      _tempBlob_mv2 && revokeBlobUrl_mv2(_tempBlob_mv2[1]); _tempBlob_mv2 = null
-    }, actions & kTeeTask.Download ? 30000 : 5000), blobRef_mv2]
-    const outResolve = resolve
-    resolve = ! [kTeeTask.CopyImage, kTeeTask.Download, kTeeTask.DrawAndCopy].includes(actions) ? outResolve
-        : (ok: BOOL | boolean) => {
-      outResolve(ok)
-      _tempBlob_mv2 && revokeBlobUrl_mv2(blobRef_mv2)
-      _tempBlob_mv2 && _tempBlob_mv2[1] === blobRef_mv2 && (clearTimeout(_tempBlob_mv2[0]), _tempBlob_mv2 = null)
-    }
-  }
+  
   if (actions & kTeeTask.CopyImage) {
     if (OnFirefox && actions !== kTeeTask.DrawAndCopy) {
       const bufType = (url ? url.slice(5, 15) : buffer!.type).toLowerCase() === "image/jpeg" ? "jpeg" : "png"
