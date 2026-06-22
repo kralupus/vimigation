@@ -13,10 +13,6 @@ const kSettingsToUpgrade_: readonly SettingsNS.LocalSettingNames[] = [
 ]
 
 const createURLSafe = (text: string): string => {
-  if (OnChrome && !Build.MV3 && noBlobSupport_cr_mv2_()) {
-    text = btoa(String.fromCharCode.apply(String, new TextEncoder().encode(text) as ArrayLike<number> as number[]))
-    return "data:application/json;base64," + text
-  }
   const blob = new Blob([text], { type: "application/json", endings: "native" })
   return URL.createObjectURL(blob)
 }
