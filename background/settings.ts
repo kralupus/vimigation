@@ -59,20 +59,6 @@ export const ready_: Promise<number> = Promise.all([
       }
     }
     let n = 0
-    if (!Build.MV3) {
-      n = legacyStorage_mv2_!.length
-      for (let i = 0; i < n; i++) {
-        const key: string = legacyStorage_mv2_!.key(i)!, str = legacyStorage_mv2_!.getItem(key)!
-        if (key in defaults_) {
-          const initial = defaults_[key as PersistentKeys]
-          const value = typeof initial === "string" ? str
-              : initial === false || initial === true ? str === "true" : JSON.parse<typeof initial>(str)
-          cache[key as PersistentKeys] = value
-        } else {
-          storageCache_.set(key as SettingsNS.LocalSettingNames, str)
-        }
-      }
-    }
     const done = n + Object.keys(items).length
     set_hasEmptyLocalStorage_(done === 0)
     return done
