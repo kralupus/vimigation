@@ -146,17 +146,7 @@
     ; (isOffscreen || document.hasFocus()) ? onFocus() : (window.onfocus = onFocus, window.focus())
   }
   let port: chrome.runtime.Port | null, refusedMoreMessages = false
-  if (!Build.MV3) {
-    const getBg = browser_.extension.getBackgroundPage
-    const bg = getBg && getBg() as unknown as BgExports | null
-    if (bg && bg.onPagesReq) {
-      const task = bg.onPagesReq({ i: GlobalConsts.TeeReqId as const, q: [] }) as unknown as BaseTeeTask | null
-      if (task) {
-        onTask(task)
-      }
-      return
-    }
-  }
+  
   try {
     port = runtime.connect({ name: "" + (PortType.selfPages | PortType.Tee | (isOffscreen ? PortType.Offscreen : 0)) })
     port.onDisconnect.addListener(destroy)
