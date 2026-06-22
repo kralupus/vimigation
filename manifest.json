@@ -59,7 +59,7 @@
   }, {
     "all_frames": true,
     "js": [
-      "content/extend_click_vc.js"
+      "content/extend_click_vc.ts"
     ],
     "match_about_blank": true,
     "match_origin_as_fallback": true,
