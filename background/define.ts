@@ -20,7 +20,6 @@ globalThis.__filename = null
   }
   const modules: Dict<ModuleTy | LoadingPromise> = {}
   const getName = (name: string): string => name.slice(name.lastIndexOf("/") + 1).replace(".js", "")
-  // const kInSW = !!Build.MV3 && Build.BTypes !== BrowserType.Firefox as number
   const kInSW = Build.BTypes !== BrowserType.Firefox as number
   const myDefine: DefineTy = (depNames, factory): void => {
     // @ts-ignore
