@@ -518,13 +518,8 @@ const updateShownPage = (options: Req.FallbackOptions, tab: Tab): void => {
               || CurCVer_ >= BrowserVer.Min$Extension$$GetView$AcceptsTabId)
           && !tab.url.split("#", 2)[1]
       ? browser_.extension.getViews({ tabId: tab.id }) : []
-    if (!Build.MV3 && !OnEdge && views.length > 0
-        && views[0].location.href.startsWith(prefix) && views[0].onhashchange as unknown) {
-      (views[0].onhashchange as () => void)()
-      selectTab(tab.id)
-    } else {
-      tabsUpdate(tab.id, { url: prefix, active: true })
-    }
+  
+    tabsUpdate(tab.id, { url: prefix, active: true })
     BgUtils_.nextTick_((): void => { runNextOnTabLoaded(options, null) })
 }
 
