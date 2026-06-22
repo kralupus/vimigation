@@ -661,9 +661,7 @@ updateHooks_.vomnibarOptions = (options: SettingsNS.BackendSettings["vomnibarOpt
     options.styles = newStyles
   }
   let finalStyles = styles instanceof Array ? styles.join(" ") : styles
-  if (OnFirefox && !Build.MV3 && isHighContrast_ff_ && !(<RegExpOne> /(^|\s)high-contrast(\s|$)/).test(finalStyles)) {
-    finalStyles += " high-contrast"
-  }
+  
   (settingsCache_ as SettingsNS.SettingsWithDefaults).vomnibarOptions = isSame ? defaultOptions : options!
   payload.n = maxMatches
   payload.i = queryInterval
